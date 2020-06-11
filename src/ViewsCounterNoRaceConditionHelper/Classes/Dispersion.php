@@ -1,0 +1,93 @@
+<?php
+
+namespace ViewsCounterNoRaceConditionHelper\Classes;
+
+
+class Dispersion
+{
+    public static $randPercent = 45;
+
+    public static $interval = 15;
+
+    public function day()
+    {
+        $rand = function ($val) {
+            $a = ['+', '-'];
+            $type = $a[rand(0, 1)];
+            $percent = $type . rand(1, self::$randPercent);
+
+            return $val + $this->extractPercent($percent, $val);
+        };
+
+        $days = [
+            0 => $this->hour(3000),
+            1 => $this->hour(1700),
+            2 => $this->hour($rand(960)),
+            3 => $this->hour($rand(600)),
+            4 => $this->hour($rand(550)),
+            5 => $this->hour($rand(450)),
+            6 => $this->hour($rand(350)),
+            8 => $this->hour($rand(650)),
+            9 => $this->hour($rand(150)),
+            10 => $this->hour($rand(100)),
+            11 => $this->hour($rand(100)),
+            12 => $this->hour($rand(100)),
+            13 => $this->hour($rand(150)),
+        ];
+
+        return $days;
+    }
+
+    private function hour($total)
+    {
+        $index = 60 / intval(self::$interval);
+
+        $detail = function ($val) use ($index) {
+            $out = [];
+            for ($i = 0; $i++ < $index;) {
+                $out[$i * self::$interval] = $val / $index;
+            }
+
+            return $out;
+        };
+
+        $hours = [
+            '00' => $detail (round($this->extractPercent(0.65, $total))),
+            '01' => $detail (round($this->extractPercent(0.65, $total))),
+            '03' => $detail (round($this->extractPercent(0.65, $total))),
+            '04' => $detail (round($this->extractPercent(1.31, $total))),
+            '06' => $detail (round($this->extractPercent(3.92, $total))),
+            '07' => $detail (round($this->extractPercent(3.27, $total))),
+            '08' => $detail (round($this->extractPercent(5.23, $total))),
+            '09' => $detail (round($this->extractPercent(4.58, $total))),
+            '10' => $detail (round($this->extractPercent(1.96, $total))),
+            '11' => $detail (round($this->extractPercent(2.61, $total))),
+            '12' => $detail (round($this->extractPercent(17.4, $total))),
+            '13' => $detail (round($this->extractPercent(7.19, $total))),
+            '14' => $detail (round($this->extractPercent(12.4, $total))),
+            '15' => $detail (round($this->extractPercent(6.54, $total))),
+            '16' => $detail (round($this->extractPercent(3.27, $total))),
+            '17' => $detail (round($this->extractPercent(6.54, $total))),
+            '18' => $detail (round($this->extractPercent(5.23, $total))),
+            '19' => $detail (round($this->extractPercent(3.27, $total))),
+            '20' => $detail (round($this->extractPercent(3.92, $total))),
+            '21' => $detail (round($this->extractPercent(5.23, $total))),
+            '22' => $detail (round($this->extractPercent(0.65, $total))),
+            '23' => $detail (round($this->extractPercent(3.92, $total))),
+        ];
+
+        return $hours;
+    }
+
+    /**
+     * Находит процент от числа
+     *
+     * @param $percent
+     * @param $number
+     * @return float|int
+     */
+    private function extractPercent($percent, $number)
+    {
+        return ($number / 100) * $percent;
+    }
+}

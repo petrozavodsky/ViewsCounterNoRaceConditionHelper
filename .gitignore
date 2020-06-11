@@ -1,0 +1,5 @@
+/.idea/
+.Ds_store
+/vendor/
+/node_modules/
+/public/css/maps/
