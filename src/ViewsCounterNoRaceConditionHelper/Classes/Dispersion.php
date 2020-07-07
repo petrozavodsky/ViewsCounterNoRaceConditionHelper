@@ -13,8 +13,8 @@ class Dispersion
     {
         $rand = function ($val) {
             $a = ['+', '-'];
-            $type = $a[rand(0, 1)];
-            $percent = $type . rand(1, self::$randPercent);
+            $type = $a[mt_rand(0, 1)];
+            $percent = $type . mt_rand(1, self::$randPercent);
 
             return $val + $this->extractPercent($percent, $val);
         };
@@ -22,10 +22,10 @@ class Dispersion
         $days = [
             0 => $this->hour(3000),
             1 => $this->hour(1700),
-            2 => $this->hour($rand(960)),
+            2 => $this->hour($rand(900)),
             3 => $this->hour($rand(600)),
-            4 => $this->hour($rand(550)),
-            5 => $this->hour($rand(450)),
+            4 => $this->hour($rand(500)),
+            5 => $this->hour($rand(400)),
             6 => $this->hour($rand(350)),
             8 => $this->hour($rand(650)),
             9 => $this->hour($rand(150)),
@@ -33,6 +33,7 @@ class Dispersion
             11 => $this->hour($rand(100)),
             12 => $this->hour($rand(100)),
             13 => $this->hour($rand(150)),
+
         ];
 
         return $days;
@@ -54,13 +55,13 @@ class Dispersion
         $hours = [
             '00' => $detail (round($this->extractPercent(0.65, $total))),
             '01' => $detail (round($this->extractPercent(0.65, $total))),
-            '03' => $detail (round($this->extractPercent(0.65, $total))),
+            '03' => $detail (round($this->extractPercent(1.65, $total))),
             '04' => $detail (round($this->extractPercent(1.31, $total))),
-            '06' => $detail (round($this->extractPercent(3.92, $total))),
-            '07' => $detail (round($this->extractPercent(3.27, $total))),
-            '08' => $detail (round($this->extractPercent(5.23, $total))),
-            '09' => $detail (round($this->extractPercent(4.58, $total))),
-            '10' => $detail (round($this->extractPercent(1.96, $total))),
+            '06' => $detail (round($this->extractPercent(7.92, $total))),
+            '07' => $detail (round($this->extractPercent(5.27, $total))),
+            '08' => $detail (round($this->extractPercent(4.23, $total))),
+            '09' => $detail (round($this->extractPercent(3.58, $total))),
+            '10' => $detail (round($this->extractPercent(8.96, $total))),
             '11' => $detail (round($this->extractPercent(2.61, $total))),
             '12' => $detail (round($this->extractPercent(17.4, $total))),
             '13' => $detail (round($this->extractPercent(7.19, $total))),
@@ -88,6 +89,21 @@ class Dispersion
      */
     private function extractPercent($percent, $number)
     {
-        return ($number / 100) * $percent;
+        $out =  ($number / 100) * $percent;
+
+        return self::randHelper($out, 33);
     }
+
+    public static function randHelper($number, $rand = 42)
+    {
+        $rand = mt_rand(1, $rand) / 100;
+
+        if ((1 / 100) < $rand) {
+
+            return $number + ($number * $rand);
+        }
+
+        return $number;
+    }
+
 }

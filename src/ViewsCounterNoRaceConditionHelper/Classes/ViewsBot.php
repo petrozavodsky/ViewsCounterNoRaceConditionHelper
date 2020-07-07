@@ -85,7 +85,7 @@ class ViewsBot
                 'views' => [
                     'key' => $this->metaViesKey,
                     'compare' => '<',
-                    'value' => intval($this->level * 1.3),
+                    'value' => Dispersion::randHelper($this->level * 44),
                     'type' => 'NUMERIC'
                 ],
                 'views_not' => [
