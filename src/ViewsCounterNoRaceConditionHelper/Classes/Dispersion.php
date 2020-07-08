@@ -5,34 +5,25 @@ namespace ViewsCounterNoRaceConditionHelper\Classes;
 
 class Dispersion
 {
-    public static $randPercent = 45;
-
     public static $interval = 15;
 
     public function day()
     {
-        $rand = function ($val) {
-            $a = ['+', '-'];
-            $type = $a[mt_rand(0, 1)];
-            $percent = $type . mt_rand(1, self::$randPercent);
-
-            return $val + $this->extractPercent($percent, $val);
-        };
 
         $days = [
-            0 => $this->hour(2000),
-            1 => $this->hour(1100),
-            2 => $this->hour($rand(1000)),
-            3 => $this->hour($rand(600)),
-            4 => $this->hour($rand(500)),
-            5 => $this->hour($rand(950)),
-            6 => $this->hour($rand(850)),
-            8 => $this->hour($rand(650)),
-            9 => $this->hour($rand(150)),
-            10 => $this->hour($rand(400)),
-            11 => $this->hour($rand(300)),
-            12 => $this->hour($rand(200)),
-            13 => $this->hour($rand(150)),
+            0 => $this->hour($this->randHelper(1800, 15)),
+            1 => $this->hour($this->randHelper(1100, 10)),
+            2 => $this->hour($this->randHelper(1300,20)),
+            3 => $this->hour($this->randHelper(600, 6)),
+            4 => $this->hour($this->randHelper(800, 2)),
+            5 => $this->hour($this->randHelper(950,3)),
+            6 => $this->hour($this->randHelper(850,3)),
+            8 => $this->hour($this->randHelper(650,3)),
+            9 => $this->hour($this->randHelper(950,3)),
+            10 => $this->hour($this->randHelper(800,3)),
+            11 => $this->hour($this->randHelper(300,3)),
+            12 => $this->hour($this->randHelper(200,3)),
+            13 => $this->hour($this->randHelper(150,3)),
 
         ];
 
@@ -89,9 +80,9 @@ class Dispersion
      */
     private function extractPercent($percent, $number)
     {
-        $out =  ($number / 100) * $percent;
+        $out = ($number / 100) * $percent;
 
-        return self::randHelper($out, 33);
+        return $out;
     }
 
     public static function randHelper($number, $rand = 42)
