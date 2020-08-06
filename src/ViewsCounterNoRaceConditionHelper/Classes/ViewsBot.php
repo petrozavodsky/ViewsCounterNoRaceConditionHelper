@@ -8,7 +8,8 @@ use ViewsCounterNoRaceConditionHelper;
 class ViewsBot
 {
 
-    private $period = 10; //days
+    private $max = 16000;
+    private $period = 12; //days
     private $level = 8000; //views
     private $levelSp = 15000; //views
     private $postsExclude = [];
@@ -23,6 +24,22 @@ class ViewsBot
         add_action('ViewsCounterNoRaceConditionHelper__schedule_commonly', [$this, 'task']);
         add_action('ViewsCounterNoRaceConditionHelper__schedule_hourly', [$this, 'errorsCorrection']);
         add_action('ViewsCounterNoRaceConditionHelper__schedule_hourly', [$this, 'errorsCorrectionSp']);
+        add_action('save_post', [$this, 'update'], 0);
+
+    }
+
+    public function update($pid)
+    {
+
+        if ($parentPid = wp_is_post_revision($pid)) {
+            $pid = $parentPid;
+        }
+
+        $meta = get_post_meta($pid, $this->metaViesKey, true);
+
+        if(empty($meta)){
+            update_post_meta($pid,$this->metaViesKey, '1');
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,13 +73,15 @@ class ViewsBot
                 $count = 0;
             }
 
-            $count = $count + $increment;
+            if ($this->max > $count) {
+                $count = $count + $increment;
 
-            $out[$post->ID] = update_post_meta(
-                $post->ID,
-                $this->metaViesKey,
-                $count
-            );
+                $out[$post->ID] = update_post_meta(
+                    $post->ID,
+                    $this->metaViesKey,
+                    $count
+                );
+            }
         }
     }
 
@@ -85,7 +104,7 @@ class ViewsBot
                 'views' => [
                     'key' => $this->metaViesKey,
                     'compare' => '<',
-                    'value' => Dispersion::randHelper($this->level * 44),
+                    'value' => Dispersion::randHelper($this->level, 44),
                     'type' => 'NUMERIC'
                 ],
                 'views_not' => [
