@@ -32,7 +32,7 @@ use ViewsCounterNoRaceConditionHelper\Classes\ViewsBot;
 class ViewsCounterNoRaceConditionHelper extends Wrap {
 	public $version = '1.0.0';
 	public static $textdomine;
-	public $metaViesKey = 'post_views_count';
+	public $metaViesKey = '_post_views_count';
 	public $postsExclude = [];
 	public static $typesPosts = [ 'advert_post', 'post', 'heroine', 'hub', 'husslenews' ];
 
