@@ -22,24 +22,8 @@ class ViewsBot
         self::interval();
 
         add_action('ViewsCounterNoRaceConditionHelper__schedule_commonly', [$this, 'task']);
-        add_action('ViewsCounterNoRaceConditionHelper__schedule_hourly', [$this, 'errorsCorrection']);
-        add_action('ViewsCounterNoRaceConditionHelper__schedule_hourly', [$this, 'errorsCorrectionSp']);
         add_action('save_post', [$this, 'update'], 0);
 
-    }
-
-    public function update($pid)
-    {
-
-        if ($parentPid = wp_is_post_revision($pid)) {
-            $pid = $parentPid;
-        }
-
-        $meta = get_post_meta($pid, $this->metaViesKey, true);
-
-        if(empty($meta)){
-            update_post_meta($pid,$this->metaViesKey, '1');
-        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,11 +60,11 @@ class ViewsBot
             if ($this->max > $count) {
                 $count = $count + $increment;
 
-                $out[$post->ID] = update_post_meta(
-                    $post->ID,
-                    $this->metaViesKey,
-                    $count
-                );
+//                $out[$post->ID] = update_post_meta(
+//                    $post->ID,
+//                    $this->metaViesKey,
+//                    $count
+//                );
             }
         }
     }
@@ -104,7 +88,7 @@ class ViewsBot
                 'views' => [
                     'key' => $this->metaViesKey,
                     'compare' => '<',
-                    'value' => Dispersion::randHelper($this->level, 44),
+                    'value' => $this->level,
                     'type' => 'NUMERIC'
                 ],
                 'views_not' => [
@@ -149,67 +133,6 @@ class ViewsBot
         });
     }
 
-
-    public function errorsCorrection()
-    {
-
-        $posts = $this->postsList();
-
-        if (!empty($posts)) {
-            foreach ($posts as $post) {
-
-                $count = (int)get_post_meta(
-                    $post->ID,
-                    $this->metaViesKey,
-                    true);
-
-                $rand = (int)rand(900, 4100);
-                $result = $rand + $count;
-
-                update_post_meta(
-                    $post->ID,
-                    $this->metaViesKey,
-                    $result
-                );
-
-            }
-        }
-
-    }
-
-    public function postsList()
-    {
-        $days = $this->period;
-        $args = [
-            'order' => 'DESC',
-            'orderby' => 'date',
-            'posts_per_page' => -1,
-            'post_status' => 'publish',
-            'post_type' => ViewsCounterNoRaceConditionHelper::$typesPosts,
-            'exclude' => $this->postsExclude,
-            'date_query' => [
-                [
-                    'before' => "{$days} days ago",
-                    'after' => '150 days ago',
-                    'inclusive' => true,
-                ]
-            ],
-            'meta_query' => [
-                'views' => [
-                    'key' => $this->metaViesKey,
-                    'compare' => '<',
-                    'value' => $this->level,
-                    'type' => 'NUMERIC'
-                ],
-                'views_not' => [
-                    'key' => $this->metaViesKey,
-                    'compare' => 'NOT EXISTS',
-                ],
-            ]
-        ];
-
-        return get_posts($args);
-    }
 
     public function errorsCorrectionSp()
     {
