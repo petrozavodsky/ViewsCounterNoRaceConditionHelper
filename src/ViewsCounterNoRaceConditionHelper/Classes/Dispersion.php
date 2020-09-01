@@ -5,7 +5,7 @@ namespace ViewsCounterNoRaceConditionHelper\Classes;
 
 class Dispersion
 {
-    public static $randPercent = 10;
+    public static $randPercent = 20;
 
     public static $interval = 15;
 
