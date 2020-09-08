@@ -18,6 +18,49 @@ class ViewsBot2
         $this->metaViesKey = $key;
         $this->postsExclude = $exclude;
         add_action('ViewsCounterNoRaceConditionHelper__schedule_commonly', [$this, 'task']);
+
+        add_action('ViewsCounterNoRaceConditionHelper__schedule_single_events', [$this, 'singleIncrement']);
+        add_action('transition_post_status', [$this, 'statusChangeWatcher'], 10, 3);
+    }
+
+    public function statusChangeWatcher($new, $old, $post)
+    {
+        if ('publish' === $new) {
+            $this->createSingleEvent($post->ID);
+        }
+    }
+
+    /**
+     * Регистрируем не повторяющееся событие дважды через примерно рандомные промежутки времени
+     *
+     * @param $pid
+     */
+    public function createSingleEvent($pid)
+    {
+        $startTime = current_time('timestamp') + (MINUTE_IN_SECONDS * 20 + rand(1, 15));
+
+        wp_schedule_event($startTime, 'ViewsCounterNoRaceConditionHelper__schedule_single_events', [$pid]);
+        wp_schedule_event(($startTime + HOUR_IN_SECONDS), 'ViewsCounterNoRaceConditionHelper__schedule_single_events', [$pid]);
+    }
+
+    public function singleIncrement($pid)
+    {
+        //  Если пост не имеет статуса publish то ничего не делаем
+        if ('publish' !== get_post_status()) {
+            return false;
+        }
+
+        $count = (int)get_post_meta($pid, $this->metaViesKey, true);
+
+        update_option('tt', ['$pid' => $pid, '$count' => $count]);
+
+//        if(1000 > $count){
+//            $count = $count + rand(700, 1300);
+//        }else{
+//            $count = $count + rand(800, 1200);
+//        }
+//
+//        update_post_meta($pid,$this->metaViesKey,$count);
     }
 
     public static function calculateDay($array)
