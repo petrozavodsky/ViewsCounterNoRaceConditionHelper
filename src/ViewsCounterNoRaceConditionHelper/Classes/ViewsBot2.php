@@ -54,6 +54,9 @@ class ViewsBot2
 
         update_option('tt', ['$pid' => $pid, '$count' => $count]);
 
+        // если просмотров уже много то ничего не делать
+        if (1100 > $count) {
+
 //        if(1000 > $count){
 //            $count = $count + rand(700, 1300);
 //        }else{
@@ -61,6 +64,7 @@ class ViewsBot2
 //        }
 //
 //        update_post_meta($pid,$this->metaViesKey,$count);
+        }
     }
 
     public static function calculateDay($array)
