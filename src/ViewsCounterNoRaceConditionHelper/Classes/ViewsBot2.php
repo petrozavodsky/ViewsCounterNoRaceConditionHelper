@@ -21,6 +21,28 @@ class ViewsBot2
 
         add_action('ViewsCounterNoRaceConditionHelper__schedule_single_events', [$this, 'singleIncrement']);
         add_action('transition_post_status', [$this, 'statusChangeWatcher'], 10, 3);
+        add_action('save_post', [$this, 'update']);
+    }
+
+    /**
+     * Добавляем при сохранении поста если метаполе совсем пустое
+     *
+     * @param $pid
+     * @return false
+     */
+    public function update($pid)
+    {
+        if (wp_is_post_autosave($pid) || wp_is_post_revision($pid)) {
+            return false;
+        }
+
+        $count = (int)get_post_meta($pid, $this->metaViesKey, true);
+
+        if (empty($count)) {
+            update_post_meta($pid, $this->metaViesKey, rand(11, 23));
+        }
+
+        return $pid;
     }
 
     public function statusChangeWatcher($new, $old, $post)
