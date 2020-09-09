@@ -47,7 +47,7 @@ class ViewsBot2
 
     public function statusChangeWatcher($new, $old, $post)
     {
-        if ('publish' === $new) {
+        if ($old !== $new && 'publish' === $new) {
             $this->createSingleEvent($post->ID);
         }
     }
