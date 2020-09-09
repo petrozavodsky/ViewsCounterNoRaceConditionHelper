@@ -61,8 +61,8 @@ class ViewsBot2
     {
         $startTime = current_time('timestamp') + (MINUTE_IN_SECONDS * 20 + rand(1, 15));
 
-        wp_schedule_event($startTime, 'ViewsCounterNoRaceConditionHelper__schedule_single_events', [$pid]);
-        wp_schedule_event(($startTime + HOUR_IN_SECONDS), 'ViewsCounterNoRaceConditionHelper__schedule_single_events', [$pid]);
+        wp_schedule_single_event($startTime, 'ViewsCounterNoRaceConditionHelper__schedule_single_events', [$pid]);
+        wp_schedule_single_event(($startTime + HOUR_IN_SECONDS), 'ViewsCounterNoRaceConditionHelper__schedule_single_events', [$pid]);
     }
 
     public function singleIncrement($pid)
