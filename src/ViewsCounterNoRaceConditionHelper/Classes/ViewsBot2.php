@@ -19,7 +19,7 @@ class ViewsBot2
         $this->postsExclude = $exclude;
         add_action('ViewsCounterNoRaceConditionHelper__schedule_commonly', [$this, 'task']);
 
-        add_action('ViewsCounterNoRaceConditionHelper__schedule_single_events', [$this, 'singleIncrement']);
+        add_action('ViewsCounterNoRaceConditionHelper__schedule_single_events', [$this, 'singleIncrement'], 10, 1);
         add_action('transition_post_status', [$this, 'statusChangeWatcher'], 10, 3);
         add_action('save_post', [$this, 'update']);
     }
@@ -67,25 +67,24 @@ class ViewsBot2
 
     public function singleIncrement($pid)
     {
+
         //  Если пост не имеет статуса publish то ничего не делаем
-        if ('publish' !== get_post_status()) {
+        if ('publish' !== get_post_status($pid)) {
             return false;
         }
 
         $count = (int)get_post_meta($pid, $this->metaViesKey, true);
 
-        update_option('tt', ['$pid' => $pid, '$count' => $count]);
-
         // если просмотров уже много то ничего не делать
         if (1100 > $count) {
 
-//        if(1000 > $count){
-//            $count = $count + rand(700, 1300);
-//        }else{
-//            $count = $count + rand(800, 1200);
-//        }
-//
-//        update_post_meta($pid,$this->metaViesKey,$count);
+        if(1000 > $count){
+            $count = $count + rand(700, 1300);
+        }else{
+            $count = $count + rand(800, 1200);
+        }
+
+        update_post_meta($pid,$this->metaViesKey,$count);
         }
     }
 
