@@ -5,7 +5,7 @@ namespace ViewsCounterNoRaceConditionHelper\Classes;
 
 class FixerSp
 {
-    private $period = 9; //days
+    private $period = 7; //days
     private $level = 15000; //views
 
     private $metaViesKey;

@@ -8,7 +8,7 @@ use ViewsCounterNoRaceConditionHelper;
 class Fixer
 {
 
-    private $period = 12; //days
+    private $period = 9; //days
     private $level = 8000; //views
 
     private $metaViesKey;

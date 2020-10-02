@@ -20,20 +20,15 @@ class Dispersion
         };
 
         $days = [
-            0 => $this->hour(3000),
+            0 => $this->hour(5000),
             1 => $this->hour(1100),
             2 => $this->hour($rand(1000)),
-            3 => $this->hour($rand(600)),
-            4 => $this->hour($rand(500)),
-            5 => $this->hour($rand(950)),
+            3 => $this->hour($rand(1900)),
+            4 => $this->hour($rand(1900)),
+            5 => $this->hour($rand(810)),
             6 => $this->hour($rand(850)),
             8 => $this->hour($rand(650)),
             9 => $this->hour($rand(950)),
-            10 => $this->hour($rand(400)),
-            11 => $this->hour($rand(900)),
-            12 => $this->hour($rand(200)),
-            13 => $this->hour($rand(150)),
-
         ];
 
         return $days;

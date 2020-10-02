@@ -66,7 +66,7 @@ class ViewsCounterNoRaceConditionHelper extends Wrap
 
         if (!wp_next_scheduled('ViewsCounterNoRaceConditionHelper__schedule_commonly')) {
             wp_schedule_event(
-                current_time('timestamp'),
+                time(),
                 'ViewsCounterNoRaceConditionHelper__schedule_commonly',
                 'ViewsCounterNoRaceConditionHelper__schedule_commonly'
             );
@@ -74,7 +74,7 @@ class ViewsCounterNoRaceConditionHelper extends Wrap
 
         if (!wp_next_scheduled('ViewsCounterNoRaceConditionHelper__schedule_hourly')) {
             wp_schedule_event(
-                current_time('timestamp'),
+                time(),
                 'hourly',
                 'ViewsCounterNoRaceConditionHelper__schedule_hourly'
             );

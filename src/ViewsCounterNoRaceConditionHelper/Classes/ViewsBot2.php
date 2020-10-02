@@ -18,10 +18,10 @@ class ViewsBot2
         $this->metaViesKey = $key;
         $this->postsExclude = $exclude;
         add_action('ViewsCounterNoRaceConditionHelper__schedule_commonly', [$this, 'task']);
-
-        add_action('ViewsCounterNoRaceConditionHelper__schedule_single_events', [$this, 'singleIncrement'], 10, 1);
         add_action('transition_post_status', [$this, 'statusChangeWatcher'], 10, 3);
         add_action('save_post', [$this, 'update']);
+        add_action('ViewsCounterNoRaceConditionHelper__schedule_single_events', [$this, 'singleIncrement'], 10, 1);
+
     }
 
     /**
@@ -59,8 +59,10 @@ class ViewsBot2
      */
     public function createSingleEvent($pid)
     {
-        $startTime = current_time('timestamp') + (MINUTE_IN_SECONDS * 20 + rand(1, 15));
+        $startTime = time() + (MINUTE_IN_SECONDS * 20 + rand(1, 15));
 
+        wp_schedule_single_event((time() + ( 5 * MINUTE_IN_SECONDS) ), 'ViewsCounterNoRaceConditionHelper__schedule_single_events',
+            [$pid]);
         wp_schedule_single_event($startTime, 'ViewsCounterNoRaceConditionHelper__schedule_single_events', [$pid]);
         wp_schedule_single_event(($startTime + HOUR_IN_SECONDS), 'ViewsCounterNoRaceConditionHelper__schedule_single_events', [$pid]);
     }
@@ -68,7 +70,6 @@ class ViewsBot2
     public function singleIncrement($pid)
     {
 
-        //  Если пост не имеет статуса publish то ничего не делаем
         if ('publish' !== get_post_status($pid)) {
             return false;
         }
@@ -76,15 +77,20 @@ class ViewsBot2
         $count = (int)get_post_meta($pid, $this->metaViesKey, true);
 
         // если просмотров уже много то ничего не делать
-        if (1100 > $count) {
+        if (2400 > $count) {
 
-        if(1000 > $count){
-            $count = $count + rand(700, 1300);
-        }else{
-            $count = $count + rand(800, 1200);
-        }
+            if(300 > $count){
+                $count = $count + rand(300, 423);
+            }else {
 
-        update_post_meta($pid,$this->metaViesKey,$count);
+                if (1000 > $count) {
+                    $count = $count + rand(800, 1300);
+                } else if (400 > $count) {
+                    $count = $count + rand(300, 600);
+                }
+            }
+
+            update_post_meta($pid, $this->metaViesKey, $count);
         }
     }
 
