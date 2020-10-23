@@ -10,7 +10,7 @@ class ViewsBot
 
     private $max = 16000;
     private $period = 12; //days
-    private $level = 8000; //views
+    private $level = 9000; //views
     private $levelSp = 15000; //views
     private $postsExclude = [];
     private $metaViesKey;
