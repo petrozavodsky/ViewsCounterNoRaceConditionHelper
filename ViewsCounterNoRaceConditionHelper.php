@@ -6,7 +6,7 @@ Author: Petrozavodsky
 Author URI: http://alkoweb.ru
 Text Domain: ViewsCounterNoRaceConditionHelper
 Domain Path: /languages
-Requires PHP: 7.0
+Requires PHP: 7.1
 Version: 1.0.0
 License: GPLv3
 */
